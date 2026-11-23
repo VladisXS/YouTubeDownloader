@@ -13,16 +13,11 @@
 на Kotlin з використанням Jetpack Compose. Працює локально на пристрої — без
 власного сервера та без хмарних сервісів.
 
-**Автор:** Vladislav Phismatovich
+**Автор:** Vladislav
 
 ---
 
 ## Скріншоти
-
-<p align="center">
-  <img src="docs/screenshots/main_screen_small.png" width="300" alt="Головний екран"/>
-  <img src="docs/screenshots/loading_state.png" width="300" alt="Отримання метаданих"/>
-</p>
 
 > Космічна тема з анімованим зоряним полем, градієнтними картками та неоновим акцентом.
 
@@ -239,3 +234,4 @@ MIT License — див. [LICENSE](LICENSE).
 - [youtubedl-android](https://github.com/yausername/youtubedl-android) (Apache 2.0)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) (Unlicense)
 - [FFmpeg](https://ffmpeg.org/) (LGPL/GPL)
+
