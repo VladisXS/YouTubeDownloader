@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/35291793/README.md)
 # YouTube Downloader
 
 <p align="center">
@@ -12,11 +13,17 @@
 Повноцінний Android-клієнт для завантаження відео з YouTube, написаний повністю
 на Kotlin з використанням Jetpack Compose. Працює локально на пристрої — без
 власного сервера та без хмарних сервісів.
-**Автор:** Vladislav
+
+**Автор:** Vladislav Phismatovich
 
 ---
 
 ## Скріншоти
+
+<p align="center">
+  <img src="docs/screenshots/main_screen_small.png" width="300" alt="Головний екран"/>
+  <img src="docs/screenshots/loading_state.png" width="300" alt="Отримання метаданих"/>
+</p>
 
 > Космічна тема з анімованим зоряним полем, градієнтними картками та неоновим акцентом.
 
@@ -225,6 +232,57 @@ PoTokenWebView.create()
 
 ---
 
+## ⚠️ Відома проблема з cookie
+
+> **Головне обмеження проєкту:** механізм авторизації через cookie працює нестабільно.
+> Застосунок зберігає cookie-файл, але не весь ланцюжок «cookie → PoToken → формати»
+> наразі замкнений у коді. Це причина, чому 4K/1440p доступні лише іноді.
+
+### Суть проблеми
+
+| Що | Стан |
+| --- | --- |
+| Вхід через WebView | ✅ реалізовано |
+| Збереження cookie у Netscape-формат | ✅ реалізовано |
+| Генерація PoToken (BotGuard) | ✅ реалізовано в `PoTokenManager` |
+| Передача токена yt-dlp | ❌ **не підключено** |
+| Заповнення `videoId` для per-video токена | ❌ **не реалізовано** |
+| Fallback при `HTTP 403` | ❌ **не реалізовано** |
+
+**Наслідок:** `YtDlpManager` викликає yt-dlp без `--extractor-args` (без `po_token`
+і без явного `player_client`). Рішення повністю залежить від дефолтної поведінки
+yt-dlp, яка для частини відео повертає лише `SABR`-стріми — і високі роздільності
+зникають зі списку форматів.
+
+### Що це означає для користувача
+
+- Без входу: максимум зазвичай **1080p**, 4K — рідко
+- З входом: 4K частіше, але **не гарантовано**
+- Те саме відео може дати різний результат у різний час / з різної мережі
+
+### Cookie — це чутливі дані
+
+> **Увага:** файл `youtube-cookies.txt` містить `SAPISID`, `__Secure-1PSID`,
+> `__Secure-3PSID` — **повноцінні сесійні токени Google**. Хто їх отримає —
+> увійде в акаунт без пароля і без 2FA.
+
+Файл зберігається **у відкритому вигляді** (без шифрування) у приватній директорії
+застосунку. Захист — лише Android sandbox.
+
+- ✅ Інші застосунки прочитати не можуть
+- ⚠️ На root-девайсі або через `adb backup` — може витекти
+- ❌ **Ніколи не передавайте папку `files/` іншим людям**
+
+### План виправлення
+
+- [ ] Підключити `PoTokenManager.session()` у `YtDlpManager.fetchInfo()`
+- [ ] Додати `--extractor-args "youtube:po_token=web.gvs+<token>;visitor_data=<vd>"`
+- [ ] Заповнювати `videoId` у `MainViewModel.startDownload()` → `PoTokenManager.playerToken(videoId)`
+- [ ] Graceful degradation: `403` на 4K → автоматично 1440p → 1080p
+- [ ] Зашифрувати cookie-файл через `EncryptedFile` (`androidx.security.crypto`)
+
+---
+
 ## Ліцензія
 
 MIT License — див. [LICENSE](LICENSE).
@@ -233,5 +291,3 @@ MIT License — див. [LICENSE](LICENSE).
 - [youtubedl-android](https://github.com/yausername/youtubedl-android) (Apache 2.0)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) (Unlicense)
 - [FFmpeg](https://ffmpeg.org/) (LGPL/GPL)
-
-
