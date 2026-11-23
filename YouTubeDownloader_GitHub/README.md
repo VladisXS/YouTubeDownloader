@@ -12,7 +12,6 @@
 Повноцінний Android-клієнт для завантаження відео з YouTube, написаний повністю
 на Kotlin з використанням Jetpack Compose. Працює локально на пристрої — без
 власного сервера та без хмарних сервісів.
-
 **Автор:** Vladislav
 
 ---
@@ -234,4 +233,5 @@ MIT License — див. [LICENSE](LICENSE).
 - [youtubedl-android](https://github.com/yausername/youtubedl-android) (Apache 2.0)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) (Unlicense)
 - [FFmpeg](https://ffmpeg.org/) (LGPL/GPL)
+
 
